@@ -1,5 +1,7 @@
 class RecipesController < ApplicationController
   
+  # before_action set_recipe_types, only: [:new, :edit]
+  
   def index
     @recipes = Recipe.all
   end
@@ -9,6 +11,7 @@ class RecipesController < ApplicationController
   end
 
   def new
+    set_recipe_types
     @recipe = Recipe.new
   end
 
@@ -17,11 +20,13 @@ class RecipesController < ApplicationController
     if @recipe.save
       redirect_to @recipe
     else
+      set_recipe_types
       render :new
     end
   end
 
   def edit
+    set_recipe_types
     @recipe = Recipe.find(params[:id])
   end
 
@@ -30,14 +35,19 @@ class RecipesController < ApplicationController
     if @recipe.update(recipe_params)
       redirect_to @recipe
     else
+      set_recipe_types
       render :edit
     end
   end
 
   private
 
+  def set_recipe_types
+    @recipe_types = RecipeType.all
+  end
+
   def recipe_params
-    params.require(:recipe).permit(:title, :recipe_type, 
+    params.require(:recipe).permit(:title, :recipe_type_id, 
     :cuisine, :difficulty, :cook_time, :ingredients, :cook_method)
   end
 end
