@@ -40,6 +40,13 @@ class RecipesController < ApplicationController
     end
   end
 
+  def destroy
+    @recipe = Recipe.find(params[:id])
+    if @recipe.destroy
+      redirect_to root_path
+    end
+  end
+
   private
 
   def set_recipe_types
